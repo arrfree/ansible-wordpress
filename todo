@@ -1,0 +1,4 @@
+- install mysql
+- install wordpress
+ - create db user and database
+ - file permissions

@@ -1,0 +1,76 @@
+- name: Install Nginx with PHP
+  hosts: ubuntu1.vbox.local
+  remote_user: arran
+  become: true
+  vars:
+    files: files/
+    files_ssl: "{{ files }}/ssl/"
+    server_name: ubuntu1.vbox.local
+    ssl_path: /etc/ssl
+    cert_name: "{{ server_name }}"
+    certificate: "{{ ssl_path }}/certs/{{ cert_name }}.crt"
+    certificate_key: "{{ ssl_path }}/private/{{ cert_name }}.key"
+    web_root: /var/www/html
+    php_version: 8.1
+
+  tasks:
+  - name: Install PHP
+    apt:
+      name: "php{{ php_version }}-cgi"
+      state: present
+
+  - name: Install PHP-FPM
+    apt:
+      name: "php{{ php_version }}-fpm"
+      state: present
+
+  - name: Install Nginx
+    apt:
+      name: nginx-core
+      state: present
+
+  - name: Copy certificate
+    copy:
+      src: "{{ files_ssl }}/{{ cert_name }}.crt"
+      dest: "{{ certificate }}"
+  
+  - name: Copy certificate key
+    copy:
+      src: "{{ files_ssl }}/{{ cert_name }}.key"
+      dest: "{{ certificate_key }}"
+
+  - name: Generate Nginx config
+    template:
+      src: "{{ files }}/nginx-wordpress.j2"
+      dest: "/etc/nginx/sites-available/{{ server_name }}"
+      owner: root
+      group: root
+      mode: '0644'
+    notify:
+      - Reload Nginx
+
+  - name: Symlink Nginx config
+    file:
+      src: "/etc/nginx/sites-available/{{ server_name }}"
+      dest: "/etc/nginx/sites-enabled/{{ server_name }}"
+      state: link
+    notify:
+      - Reload Nginx
+
+  - name: Unlink Nginx default site
+    file:
+      path: "/etc/nginx/sites-enabled/default"
+      state: absent
+    notify:
+      - Reload Nginx
+
+  - name: Copy index.php
+    copy:
+      src: "{{ files }}/index.php"
+      dest: "{{ web_root }}/index.php" 
+
+  handlers:
+    - name: Reload Nginx
+      systemd:
+        name: nginx.service
+        state: reloaded

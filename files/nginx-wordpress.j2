@@ -1,0 +1,18 @@
+server {
+        listen 443 ssl;
+        server_name {{server_name}};
+        
+        ssl_certificate {{certificate}};
+        ssl_certificate_key {{certificate_key}};
+
+        root {{web_root}};
+
+        index index.php index.html index.htm;
+
+        location ~ \.php$ {
+               include snippets/fastcgi-php.conf;
+        
+               # With php-fpm (or other unix sockets):
+               fastcgi_pass unix:/run/php/php{{ php_version }}-fpm.sock;
+        }
+}
