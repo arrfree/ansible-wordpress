@@ -4,3 +4,8 @@
  - fully automate install via
   - wp cli
   - curl using post with form data
+
+- secure storage of secrets
+ - SSL cert & key
+ - MariaDB password
+ - ansible vault
