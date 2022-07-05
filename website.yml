@@ -1,4 +1,4 @@
-- name: Install Nginx with PHP
+- name: Install Nginx with PHP and MariaDB
   hosts: ubuntu1.vbox.local
   remote_user: arran
   become: true
@@ -12,8 +12,48 @@
     certificate_key: "{{ ssl_path }}/private/{{ cert_name }}.key"
     web_root: /var/www/html
     php_version: 8.1
+  vars_prompt:
+    - name: mariadb_root_password
+      prompt: Enter a new MariaDB root password
 
   tasks:
+  - name: Install Python3 MySQL
+    apt:
+      name: python3-mysqldb
+      state: present
+
+  - name: Install MariaDB
+    apt:
+      name: mariadb-server-10.6
+      state: present
+
+  - name: Remove Test db from MariaDB
+    mysql_query:
+      login_db: mysql
+      query:
+      - DROP DATABASE IF EXISTS test;
+      - DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%'
+
+  - name: Remove any remote MariaDB root account
+    mysql_query:
+      login_db: mysql
+      query: DELETE FROM mysql.global_priv WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
+
+  - name: Remove anonymous MariaDB users
+    mysql_query:
+      login_db: mysql
+      query: DELETE FROM mysql.global_priv WHERE User='';
+  
+  - name: Secure MariaDB root password
+    mysql_query:
+      login_db: mysql
+      query: "UPDATE mysql.global_priv SET priv=json_set(priv, '$.plugin', 'mysql_native_password', '$.authentication_string', PASSWORD('{{ mariadb_root_password }}')) WHERE User='root';"
+  
+  - name: Flush Priviledge tables
+    mysql_query:
+      login_db: mysql
+      query: FLUSH PRIVILEGES;
+
   - name: Install PHP
     apt:
       name: "php{{ php_version }}-cgi"
