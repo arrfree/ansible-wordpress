@@ -73,11 +73,15 @@
     copy:
       src: "{{ files_ssl }}/{{ cert_name }}.crt"
       dest: "{{ certificate }}"
+    notify:
+      - Reload Nginx
   
   - name: Copy certificate key
     copy:
       src: "{{ files_ssl }}/{{ cert_name }}.key"
       dest: "{{ certificate_key }}"
+    notify:
+      - Reload Nginx
 
   - name: Generate Nginx config
     template:
