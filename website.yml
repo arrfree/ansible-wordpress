@@ -65,6 +65,16 @@
       name: "php{{ php_version }}-fpm"
       state: present
 
+  - name: Install PHP-mysql
+    apt:
+      name: "php{{ php_version }}-mysql"
+      state: present
+
+  - name: Install PHP-gd
+    apt:
+      name: "php{{ php_version }}-gd"
+      state: present
+
   - name: Install Nginx
     apt:
       name: nginx-core
