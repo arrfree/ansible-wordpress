@@ -1,11 +1,11 @@
 - name: Install Nginx with PHP and MariaDB
-  hosts: ubuntu1.vbox.local
+  hosts: all
   remote_user: arran
   become: true
   vars:
     files: files/
     files_ssl: "{{ files }}/ssl/"
-    server_name: ubuntu1.vbox.local
+    server_name: "{{ inventory_hostname }}"
     ssl_path: /etc/ssl
     cert_name: "{{ server_name }}"
     certificate: "{{ ssl_path }}/certs/{{ cert_name }}.crt"
