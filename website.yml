@@ -10,6 +10,7 @@
     cert_name: "{{ server_name }}"
     certificate: "{{ ssl_path }}/certs/{{ cert_name }}.crt"
     certificate_key: "{{ ssl_path }}/private/{{ cert_name }}.key"
+    wordpress_targz: "{{ files }}/wordpress-6.3.1.tar.gz"
     web_root: /var/www/html
     php_version: 8.1
   vars_prompt:
@@ -111,7 +112,12 @@
   - name: Copy index.php
     copy:
       src: "{{ files }}/index.php"
-      dest: "{{ web_root }}/index.php" 
+      dest: "{{ web_root }}/index.php"
+
+  - name: Copy & Extract Wordpress archive
+    ansible.builtin.unarchive:
+      src: "{{ wordpress_targz }}"
+      dest: "{{ web_root }}/"
 
   handlers:
     - name: Reload Nginx
