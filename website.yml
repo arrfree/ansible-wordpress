@@ -11,6 +11,9 @@
     certificate: "{{ ssl_path }}/certs/{{ cert_name }}.crt"
     certificate_key: "{{ ssl_path }}/private/{{ cert_name }}.key"
     wordpress_targz: "{{ files }}/wordpress-6.3.1.tar.gz"
+    wordpress_username: wordpress
+    wordpress_password: wordpress
+    wordpress_database: wordpress
     web_root: /var/www/html
     php_version: 8.1
   vars_prompt:
@@ -129,6 +132,18 @@
       src: "{{ wordpress_targz }}"
       dest: "{{ web_root }}/"
 
+  - name: Create Wordpress database
+    mysql_db:
+      name:
+        - "{{ wordpress_database }}"
+      state: present
+
+  - name: Create Wordpress user & apply permissions
+    mysql_query:
+      query:
+        - "CREATE USER '{{ wordpress_username }}'@'localhost' IDENTIFIED BY '{{ wordpress_password }}';"
+        - "GRANT ALL ON {{ wordpress_database }}.* TO '{{ wordpress_username }}'@'localhost';"
+        
   handlers:
     - name: Reload Nginx
       systemd:
