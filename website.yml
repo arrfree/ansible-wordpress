@@ -152,7 +152,7 @@
 
   - name: Create Wordpress uploads folder and set ownership
     file:
-      path: {{ web_root }}/wordpress/wp-content/uploads
+      path: "{{ web_root }}/wordpress/wp-content/uploads"
       state: directory
       owner: www-data
       group: www-data
