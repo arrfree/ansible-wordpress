@@ -21,6 +21,10 @@
       prompt: Enter a new MariaDB root password
 
   tasks:
+  - name: "apt-get update"
+    apt:
+      update_cache: yes
+
   - name: Install Python3 MySQL
     apt:
       name: python3-mysqldb
