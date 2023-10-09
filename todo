@@ -1,5 +1,5 @@
 - install wordpress
- - create db user and database
+ - create db user and database      [DONE]
  - file permissions
  - fully automate install via
   - wp cli
