@@ -139,10 +139,12 @@
       state: present
 
   - name: Create Wordpress user & apply permissions
-    mysql_query:
-      query:
-        - "CREATE USER '{{ wordpress_username }}'@'localhost' IDENTIFIED BY '{{ wordpress_password }}';"
-        - "GRANT ALL ON {{ wordpress_database }}.* TO '{{ wordpress_username }}'@'localhost';"
+    mysql_user:
+      name: "{{ wordpress_username }}"
+      host: localhost
+      password: "{{ wordpress_password }}"
+      priv: "{{ wordpress_database }}.*:ALL"
+      state: present
         
   handlers:
     - name: Reload Nginx
