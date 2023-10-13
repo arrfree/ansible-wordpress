@@ -2,8 +2,7 @@
  - create db user and database      [DONE]
  - file permissions
  - fully automate install via
-  - wp cli
-  - curl using post with form data
+  - wp cli                          [DONE]
 
 - secure storage of secrets
  - SSL cert & key
