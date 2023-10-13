@@ -11,6 +11,7 @@
     certificate: "{{ ssl_path }}/certs/{{ cert_name }}.crt"
     certificate_key: "{{ ssl_path }}/private/{{ cert_name }}.key"
     wordpress_targz: "{{ files }}/wordpress-6.3.1.tar.gz"
+    wp_cli_phar: "{{ files }}/wp-cli.phar"
     wordpress_username: wordpress
     wordpress_password: wordpress
     wordpress_database: wordpress
@@ -158,6 +159,37 @@
       group: www-data
       mode: '0740'
 
+  - name: Install WP-CLI
+    copy:
+      src: "{{ wp_cli_phar }}"
+      dest: /usr/local/bin/wp
+      owner: root
+      group: root
+      mode: '0755'
+
+  - name: Generate wp-cli.local.yml
+    template:
+      src: "{{ files }}/wp-cli.local.yml.j2"
+      dest: "/home/arran/wp-cli.local.yml"
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: '0640'
+      # remove password after use
+
+  - name: Wordpress install check
+    shell: "wp --allow-root core is-installed"
+    register: wp_core_is_installed
+    ignore_errors: true
+
+  - name: Create wp-config.php with WP-CLI
+    shell: "wp --allow-root config create"
+    when: not (wp_core_is_installed.rc == 0)
+    ignore_errors: true
+
+  - name: Perform Wordpress install with WP-CLI
+    shell: "wp --allow-root core install"
+    when: not (wp_core_is_installed.rc == 0)
+    
   handlers:
     - name: Reload Nginx
       systemd:

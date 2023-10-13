@@ -1,0 +1,13 @@
+path: {{ web_root }}/wordpress
+url: https://{{ inventory_hostname }}/wordpress
+
+config create:
+    dbname: {{ wordpress_database }}
+    dbuser: {{ wordpress_username }}
+    dbpass: {{ wordpress_password }}
+
+core install:
+    title: Wordpress Site Name
+    admin_user: arran
+    admin_password: arran   
+    admin_email: arran@example.org
