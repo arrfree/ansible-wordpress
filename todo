@@ -6,6 +6,9 @@
  - remove passwords from wp-cli yml file
  - create variables where needed
  - separate variables into file
+ - fix wp-cli create conflict with 
+   'Create Wordpress uploads folder and 
+   set ownership'
 
 - secure storage of secrets
  - SSL cert & key
