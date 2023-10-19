@@ -15,6 +15,8 @@
     wordpress_username: wordpress
     wordpress_password: wordpress
     wordpress_database: wordpress
+    wordpress_site_title: Wordpress Site Name
+    wordpress_dir_name: wordpress
     web_root: /var/www/html
     php_version: 8.1
   vars_prompt:
@@ -153,7 +155,7 @@
 
   - name: Create Wordpress uploads folder and set ownership
     file:
-      path: "{{ web_root }}/wordpress/wp-content/uploads"
+      path: "{{ web_root }}/{{ wordpress_dir_name }}/wp-content/uploads"
       state: directory
       owner: www-data
       group: www-data
@@ -170,7 +172,7 @@
   - name: Generate wp-cli.local.yml
     template:
       src: "{{ files }}/wp-cli.local.yml.j2"
-      dest: "/home/arran/wp-cli.local.yml"
+      dest: "/home/{{ ansible_user }}/wp-cli.local.yml"
       owner: "{{ ansible_user }}"
       group: "{{ ansible_user }}"
       mode: '0640'

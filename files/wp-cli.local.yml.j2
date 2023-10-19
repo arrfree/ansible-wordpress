@@ -1,5 +1,5 @@
-path: {{ web_root }}/wordpress
-url: https://{{ inventory_hostname }}/wordpress
+path: {{ web_root }}/{{ wordpress_dir_name }}
+url: https://{{ inventory_hostname }}/{{ wordpress_dir_name }}
 
 config create:
     dbname: {{ wordpress_database }}
@@ -7,7 +7,7 @@ config create:
     dbpass: {{ wordpress_password }}
 
 core install:
-    title: Wordpress Site Name
+    title: {{ wordpress_site_title }}
     admin_user: arran
     admin_password: arran   
     admin_email: arran@example.org
