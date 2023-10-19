@@ -1,8 +1,11 @@
 - install wordpress
- - create db user and database      [DONE]
+ - create db user and database            [DONE]
  - file permissions
  - fully automate install via
-  - wp cli                          [DONE]
+  - wp cli                                [DONE]
+ - remove passwords from wp-cli yml file
+ - create variables where needed
+ - separate variables into file
 
 - secure storage of secrets
  - SSL cert & key
