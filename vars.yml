@@ -1,0 +1,49 @@
+server:
+  name: "{{ inventory_hostname }}"
+
+files:
+  base: files
+  ssl: files/ssl
+
+nginx:
+ root: /var/www/html
+
+cert:
+  name: "{{ server.name }}"
+  file:
+    path: /etc/ssl
+    cert: "{{ cert.file.path }}/certs/{{ cert.name }}.crt"
+    key: "{{ cert.file.path }}/private/{{ cert.name }}.key"
+
+php:
+  version: 8.1
+
+mariadb:
+  version: 10.6
+
+wordpress:
+  wp_cli:
+   phar: "{{ files.base }}/wp-cli.phar"
+   conf: wp-cli.local.yml
+
+  targz: "{{ files.base }}/wordpress-6.3.1.tar.gz"
+  
+  dirs: 
+    root: wordpress
+    uploads: "{{ wordpress.dirs.root }}/uploads"
+  
+  create:
+    database: 
+      name: wordpress
+      username: wordpress
+      paswword: wordpress
+  
+  install:
+    site_title: Wordpress Site Name
+    admin:
+    user: arran
+    password: arran
+    email: arran@exampl.org
+
+
+
