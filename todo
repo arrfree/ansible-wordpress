@@ -1,3 +1,5 @@
+Todo
+
 - install wordpress
  - create db user and database            [DONE]
  - file permissions
@@ -14,3 +16,10 @@
  - SSL cert & key
  - MariaDB password
  - ansible vault
+
+ Issues
+
+- first pass with cert key missing
+- second pass with both cert & cert key present
+ - nginx not listening on 443, would expect notify in cert key file copy task to notify nginx reload
+   had to reload nginx manually 
