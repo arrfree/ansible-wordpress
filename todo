@@ -10,9 +10,6 @@ Todo
  - remove passwords from wp-cli yml file
  - create variables where needed
  - separate variables into file
- - fix wp-cli create conflict with 
-   'Create Wordpress uploads folder and 
-   set ownership'
 
 - secure storage of secrets
  - SSL cert & key
@@ -20,6 +17,10 @@ Todo
  - ansible vault
 
  Issues
+
+- fix wp-cli create conflict with 
+  'Create Wordpress uploads folder and 
+  set ownership'
 
 - first pass with cert key missing
 - second pass with both cert & cert key present
