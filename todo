@@ -1,6 +1,8 @@
 Todo
 
 - install wordpress
+ - update wordpress version
+ - update wp-cli if applicable
  - create db user and database            [DONE]
  - file permissions
  - fully automate install via
