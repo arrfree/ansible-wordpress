@@ -173,8 +173,8 @@
     template:
       src: "{{ files }}/wp-cli.local.yml.j2"
       dest: "/home/{{ ansible_user }}/wp-cli.local.yml"
-      owner: "{{ ansible_user }}"
-      group: "{{ ansible_user }}"
+      owner: "www-data"
+      group: "www-data"
       mode: '0640'
       # remove password after use
 
@@ -189,7 +189,9 @@
     ignore_errors: true
 
   - name: Perform Wordpress install with WP-CLI
-    shell: "wp --allow-root core install"
+    command: "wp core install"
+    become: yes
+    become_user: www-data
     when: not (wp_core_is_installed.rc == 0)
     
   handlers:
